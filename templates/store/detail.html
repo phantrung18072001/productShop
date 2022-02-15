@@ -1,0 +1,125 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block title%} Home {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/store/navbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/store/detail.css' %}" />
+
+{% endblock %}
+
+{% block content %}
+    <div id="content" class="content section container">
+        <div class="breadcrumb">
+            <a class="breadcrumb-item" href="{% url 'store:home' %}">Trang chủ</a>
+            <a class="breadcrumb-item">{{product.category}}</a>
+            <a class="breadcrumb-item">{{product.title}}</a>
+        </div>
+        <div class="single-product row">
+            <div class="single-product-img col-xl-4 col-lg-4">
+                <div class="product-main-img">
+                    <img src="{{product.images.0.path.url}}" alt="Mặt trước">
+                </div>
+                <div class="product-review-img">
+                    {% for image in product.images.all %}
+                        <img src="{{image.path.url}}" alt="Mặt trước" class="list-img">
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="product-main col-xl-8 col-lg-8">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <h2 class="product-heading">{{product.title}}</h2>
+                    <h3 class="product-author">{{product.auth}}</h3>
+                    <div class="product-info">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Nhà xuất bản</td>
+                                    <td>{{product.publisher}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Quốc gia</td>
+                                    <td>{{product.country.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Thể loại</td>
+                                    <td>{{product.category}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Năm phát hành</td>
+                                    <td>{{product.year_publish}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Số lượng sản phẩm còn lại</td>
+                                    <td class="quantity">{{product.inventories.quantity}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Giá sản phẩm</td>
+                                    <td class="format">{{product.product_price.price}} đồng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="product-num">
+                        <button type="button" class="product-btn-sub">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="product-icon-num bi bi-dash-lg" viewBox="0 0 16 16">
+                                <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
+                            </svg>
+                        </button>
+                        <input type="text" class="product-num-input" name="quantity" value="1">
+                        <button type="button" class="product-btn-add">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="product-icon-num bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div>
+                        {% if user.is_authenticated %}
+                            {% if product.inventories.quantity <= 0 %}
+                            <div class="alert alert-danger">*Sản phẩm đã hết hàng. Mong bạn quay lại sau.</div>
+                            {% else %}
+                            <button type="submit" class="add-cart">Thêm vào giỏ hàng</button>
+                            <button type="button" class="view-cart">Xem giỏ hàng</button>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-danger">*Bạn chưa đăng nhập nên chưa có tính năng giỏ hàng.</div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="product-review">
+            <h3 class="product-review-heading">Đặc điểm nổi bật</h3>
+            <div class="product-review-main">
+                <p>{{product.description}}</p>
+            </div>
+        </div>
+        <!-- <div class="same-category">
+            <h3 class="same-category-heading">sản phẩm cùng thể loại</h3>
+            <div class="same-category-list row">
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="" class="product-item-link">
+                            <img src="{% static 'img/product1.jpg' %}" class="product-img">
+                            <h4 class="product-name">sản phẩm 2</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">Shiba</span>
+                        </div>
+                        <div class="product-item-action">
+                            <p class="ddc-code">Thể loại: <span>Kinh dị</span></p>
+                            <span class="product-sold">SL: 10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/productPage.js' %}"></script>
+{% endblock %}

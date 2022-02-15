@@ -1,0 +1,223 @@
+{% extends "./base2.html" %}
+{% load static %}
+{% block title%} Cập nhật Sản phẩm {% endblock %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'js/admin/vendors/select2/select2.min.css' %}">
+  <link rel="stylesheet" href="{% static 'js/admin/vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid page-body-wrapper container-scroller">
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'adminPage:dashboard' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="products">
+              <i class="icon-product menu-icon"></i>
+              <span class="menu-title">Sản phẩm</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="products">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_List' %}"><i class="mdi mdi-information-outline"></i>Thông tin</a></li>
+              </ul>
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:product_Add' %}"><i class="mdi mdi-plus-circle"></i>Thêm</a></li>
+              </ul>
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_Update' %}"><i class="mdi mdi-sync"></i>Cập nhật</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'adminPage:users_List' %}">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">Người dùng</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'adminPage:orders_List' %}">
+              <i class="ti-view-list-alt menu-icon"></i>
+              <span class="menu-title">Đơn hàng</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <form class="form-sample" id="productInfo" enctype="multipart/form-data" method="POST" action="">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Bìa Sản phẩm</h4>
+                      <div class="form-group">
+                        <label for="FrontCover">Bìa trước</label>
+                        <div class="form-group" id="displayFrontCover" style="background-image: url('/media/{{ product.3.0 }}'); width: auto;"></div>                    
+                        <input type="file" id="FrontCover" name="FrontCover_Image" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                          <input type="text" id="FrontCover_Image" class="form-control file-upload-info" disabled value="{{ product.3.0 }}" required>
+                          <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary" type="button">Tải lên</button>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="BackCover">Bìa sau</label>
+                        <div class="form-group" id="displayBackCover" style="background-image: url('/media/{{ product.3.1 }}'); width: auto;"></div>                    
+                        <input type="file" id="BackCover" name="BackCover_Image" class="file-upload-default">
+                        <div class="input-group col-xs-12">
+                          <input type="text" id="BackCover_Image" class="form-control file-upload-info" disabled value="{{ product.3.1 }}" required>
+                          <span class="input-group-append">
+                            <button class="file-upload-browse btn btn-primary" type="button">Tải lên</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-8 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Cập nhật Sản phẩm</h4>
+                      <div class="row" style="display: none;">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productID">ID</label>
+                            <input type="text" class="form-control" id="productID" name="id" value="{{product.0.0.0}}" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productTitle">Tên Sản phẩm</label>
+                            <input type="text" class="form-control" id="productTitle" name="title" value="{{product.0.0.1}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productAuthor">Tác giả</label>
+                            <input type="text" class="form-control" id="productAuthor" name="auth" value="{{product.0.0.2}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productCategory">Phân loại</label>
+                            <select style="display: block;" class="form-control" id="productCategory" name="category">
+                              {% for category in categories %}
+                                <option value="{{ category.0 }}" {% if category.1 == product.0.0.3 %} selected = "selected" {% endif %}>{{ category.1 }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productPrice">Giá</label>
+                            <input type="text" class="form-control" id="productPrice" name="price" value="{{product.2.0}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productPublisher">Nhà xuất bản</label>
+                            <input type="text" class="form-control" id="productPublisher" name="publisher" value="{{product.0.0.4}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productCountry">Quốc gia</label>
+                            {% load countries %}
+                            {% get_countries as countries %}
+                            <select style="display: block;" class="form-control" id="productCountry" name="country">
+                              {% for country in countries %}
+                                <option value="{{ country.code }}" {% if country.code == product.0.0.5 %} selected = "selected" {% endif %}>{{ country.name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productYearPublish">Năm phát hành</label>
+                            <input type="text" class="form-control" id="productYearPublish" name="year_publish" value="{{product.0.0.6}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">  
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productQuantity">Số lượng</label>
+                            <input type="text" class="form-control" id="productQuantity" name="quantity" value="{{product.1.0}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productDescription">Mô tả</label>
+                            <textarea class="form-control" id="productDescription" name="description" rows="12" required>{{product.0.0.7}}</textarea>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <button type="submit" class="btn btn-danger mr-2" onclick="deleteForm()">Xóa</button>
+              <button type="submit" class="btn btn-primary mr-2" onclick="submitForm()">Sửa</button>
+              <button type="button" class="btn btn-secondary mr-2" onclick="returnproducts_Update()">Hủy</button>
+            </div>
+          </form>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+{% endblock %}
+ 
+{% block extra_js %}
+  <!-- Plugin js for this page -->
+  <script src="{% static 'js/admin/vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+  <script src="{% static 'js/admin/vendors/select2/select2.min.js' %}"></script>
+  <!-- Custom js for this page-->
+  <script src="{% static 'js/admin/file-upload.js' %}"></script>
+  <script src="{% static 'js/admin/select2.js' %}"></script>
+  <script>
+    returnproducts_Update = function() {
+      window.location.href = "{% url 'adminPage:products_Update' %}";
+    }
+
+    submitForm = function() {
+      document.getElementById("productInfo").setAttribute("action", "{% url 'adminPage:product_Update' %}");
+      document.getElementById("productInfo").submit();
+      alert("Sửa Sản phẩm thành công!");
+    }
+
+    deleteForm = function() {
+      document.getElementById("productInfo").setAttribute("action", "{% url 'adminPage:product_Delete' %}")
+      document.getElementById("productInfo").submit();
+      alert("Xóa Sản phẩm thành công!");
+    }
+  </script>
+{% endblock %}

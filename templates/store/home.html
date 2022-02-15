@@ -1,0 +1,165 @@
+{% extends "./base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title%} Home {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/store/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/store/slide.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="slider">
+        <div class="mySlides fadeup active">
+            <img class="slide-img" src="{% static 'img/slide1.png' %}" alt="slide1">
+        </div>
+        <div class="mySlides fadeup">
+            <img class="slide-img" src="{% static 'img/slide2.png' %}" alt="slide2">
+        </div>
+        <div class="mySlides fadeup">
+            <img class="slide-img" src="{% static 'img/slide3.png' %}" alt="slide3">
+        </div>
+        <a class="prev" >&#10094;</a>
+        <a class="next" >&#10095;</a>
+    </div>
+    <div class="content container">
+        <div class="section">
+            <div class="content-heading">
+                <img src="https://cdn0.fahasa.com/skin/frontend/base/default/images/ico_dealhot.png">
+                <h3>Xu hướng mua sắm</h3>
+            </div>
+            <div class="type">
+                <button class = 'type-btn active'>Sản phẩm khuyến mãi</button>
+                <button class = 'type-btn'>Xu hướng trong tháng</button>
+                <button class = 'type-btn'>Sản phẩm mới</button>
+            </div>
+            <div class="category-list row trending active">
+                {% for product in productOfDay %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
+                            <img src="/media/{{product.9}}" class="product-img">
+                            <h4 class="product-name">{{product.1}}</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">{{product.2}}</span>
+                        </div>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
+                        </div>
+                        <div class="product-item-action" style="margin-bottom:0px;">
+                            <span class="price format">Giá: {{product.7}}đ</span>
+                            <span class="product-sold">SL: {{product.8}}</span>
+                        </div>
+                        <div class="product-item-action" style="justify-content:center;">
+                            <span class="product-sold">Đã bán trong tuần: {{product.10}}</span>
+                        </div>
+                        <div class="home-product-item__favourite">
+                            <i class="fab fa-hotjar"></i>
+                            Trending
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="category-list row trending">
+                {% for product in productOfMonth %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
+                            <img src="/media/{{product.9}}" class="product-img">
+                            <h4 class="product-name">{{product.1}}</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">{{product.2}}</span>
+                        </div>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
+                        </div>
+                        <div class="product-item-action" style="margin-bottom:0px;">
+                            <span class="price format">Giá: {{product.7}}đ</span>
+                            <span class="product-sold">SL: {{product.8}}</span>
+                        </div>
+                        <div class="product-item-action" style="justify-content:center;">
+                            <span class="product-sold">Đã bán trong tháng: {{product.10}}</span>
+                        </div>
+                        <div class="home-product-item__favourite">
+                            <i class="fab fa-hotjar"></i>
+                            Trending
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="category-list row trending">
+                {% for product in newproduct %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
+                            <img src="/media/{{product.9}}" class="product-img">
+                            <h4 class="product-name">{{product.1}}</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">{{product.2}}</span>
+                        </div>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
+                        </div>
+                        <div class="product-item-action">
+                            <span class="price format">Giá: {{product.7}}đ</span>
+                            <span class="product-sold">SL: {{product.8}}</span>
+                        </div>
+                        <div class="home-product-item__favourite">
+                            <i class="fas fa-check"></i>
+                            New
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% for category, products in context.items %}         
+        <div class="section">
+            <div class="content-heading">
+                <h3>Sản phẩm {{category}}</h3>
+            </div>
+            <div class="category-list row">
+                {% for product in products %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:productPage' product.id %}" class="product-item-link">
+                            <!-- Lâu, chưa tối ưu khi có nhiều ảnh
+                                làm sao để get một ảnh main duy nhất -->
+                            {% for image in product.images.all %}
+                                {% if image.main_image is True %}
+                                    <img src="{{image.path.url}}" class="product-img">
+                                {% endif %}
+                            {% endfor %}
+                            <h4 class="product-name">{{product.title}}</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">{{product.auth}}</span>
+                        </div>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{category}}</span></p>
+                        </div>
+                        <div class="product-item-action">
+                            <span class="price format">Giá: {{product.product_price.price}}đ</span>
+                            <span class="product-sold">SL: {{product.inventories.quantity}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="read-more">
+                <a href="/shelf/?category={{category}}" class="read-more-btn">Xem thêm</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}
+
+{% block extra_js %}
+    <script src = "{% static 'js/slide.js' %}"></script>
+    <script src = "{% static 'js/home.js' %}"></script>
+{% endblock %}

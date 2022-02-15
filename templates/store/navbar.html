@@ -1,0 +1,101 @@
+{% load static %}
+<div id="header" class="header">
+    <nav class="nav container">
+        <a href="{% url 'store:home' %}" class="logo"><img src="{% static 'img/logo_shop.jpg' %}"></a>
+        <div class="nav-search">
+            <form action="/shelf" class="form-search-product" autocomplete="off">
+                <input type="text" name="info" class="search-input" placeholder="Nhập vào để tìm kiếm sản phẩm">
+                <button class="btn-search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" stroke-width="6" fill="currentColor"
+                        class="icon-search bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <div class="wrapper-nav">
+            <ul class="nav_list">
+                <li class="nav_list_link ">
+                    <span class="nav-categories-heading">DANH MỤC</span>
+                    <ul class="nav-categories">
+                        {% for category in categories %}
+                        <li class="nav-category">
+                            <a href="/shelf/?category={{category.0}}" class="category-link" id="" name="category">{{category.0}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>
+                    <div class="nav-cart">
+                        <div class="header_cart-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="icon-cart bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z" />
+                            </svg>
+                        </div>
+                        <span class="nav-cart-notice">{{count}}</span>
+                        <div class="nav-cart-list">
+                            <div class="nav-no-cart">
+                                <img src="{% static 'img/empty.png' %}" alt="" class="nav-cart--no-cart-img">
+                                <p class="nav-cart--no-cart-text">Chưa Có Sản Phẩm</p>
+                            </div>
+                            <div class="nav_has_cart">
+                                <h3 class="nav-cart-heading">Sản phẩm đã thêm</h3>
+                                <ul class="nav-cart-list-item">
+                                    {% csrf_token %}
+                                    {% for cart_item in cart_items %}
+                                    <li class="nav-cart-item">
+                                        {% for image in cart_item.product.images.all %}
+                                            {% if image.main_image is True %}
+                                            <img src="{{image.path.url}}" alt="Mặt trước" class="nav_cart-item-img">
+                                            {% endif %}
+                                        {% endfor %}
+                                        <div class="nav-cart-item-info">
+                                            <div class="nav-cart-item-heading">
+                                                <h5 class="nav-cart-item-name">{{cart_item.product.title}}</h5>
+                                            </div>
+                                            <div class="nav-cart-item-body">                                                
+                                                <span class="nav-cart-item-desc">{{cart_item.product.auth}}</span>
+                                                <input type="hidden" name='cart' value="{{cart_item.id}}" class="cart-item-id" >
+                                                <button class="nav-cart-item-remove">Xóa</button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <button class="btn-primary nav-cart-view btn-effect">Xem giỏ hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% if user.is_authenticated %}
+                    <div class="nav-logged-in">
+                        <div class="nav-user">
+                            <img src="{{user.image.url}}" alt="" class="nav-user-img">
+                            <ul class="nav-user-menu">
+                                {% if user.is_admin %}
+                                <li class="nav-user-item">
+                                    <a href="{% url 'adminPage:dashboard' %}">Trang quản trị</a>
+                                </li>
+                                {% endif %}
+                                <li class="nav-user-item">
+                                    <a href="{% url 'account:profile' %}">Thông tin cá nhân</a>
+                                </li>
+                                <li class="nav-user-item">
+                                    <a href="{% url 'store:infoShip' %}">Đơn hàng</a>
+                                </li>
+                                <li class="nav-user-item">
+                                    <a href="{% url 'account:logout' %}">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}    
+                    <li><a class="nav_list_link login nav-not-logged-in" href="{% url 'account:login' %}">ĐĂNG NHẬP</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</div>

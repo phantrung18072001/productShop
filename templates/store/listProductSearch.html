@@ -1,0 +1,132 @@
+{% extends "./base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} listProductSearch {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static './css/store/listProductSearch.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="wrap container row">
+        <!-- <div class="filter col-xl-3">
+            <div class="filter-heading">
+                <h2 class="filter-heading-text">Bộ lọc</h2>
+            </div>
+            <div class="filter-body">
+                <div class="filter-feature">
+                    <h3 class="filter-feature-heading">Danh mục</h3>
+                    <ol class="filter-feature-choices">
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="category" value="" id="category-0">
+                            <label for="category-0">Tất cả</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="category" value="" id="category-1">
+                            <label for="category-1">Kinh dị</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="category" value="" id="category-2">
+                            <label for="category-2">Văn học</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="category" value="" id="category-3">
+                            <label for="category-3">Trinh thám</label>
+                        </li>
+                    </ol>
+                </div>
+                <div class="filter-feature">
+                    <h3 class="filter-feature-heading">Giá tiền</h3>
+                    <ol class="filter-feature-choices">
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="price" value="" id="price-0">
+                            <label for="price-0">Dưới 50.000</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="price" value="" id="price-1">
+                            <label for="price-1">Từ 50.000 đến 100.000</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="price" value="" id="price-2">
+                            <label for="price-2">Từ 100.000 đến 300.000</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="price" value="" id="price-3">
+                            <label for="price-3">Từ 300.000 đến 500.000</label>
+                        </li>
+                        <li class="choice-wrap">
+                            <input type="checkbox" name="price" value="" id="price-4">
+                            <label for="price-4">Trên 500.000</label>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div> -->
+        <div class="listProductSearch col-xl-12">
+            <h5 class="listProductSearch_heading">Kết quả tìm kiếm với:
+                <span>
+                    {% if info %}
+                        {{info}}
+                    {% elif category %}
+                        Thể loại {{category}}
+                    {% endif %}
+                </span>
+            </h5>
+            <div class="category-list row">
+                {% for product in products %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
+                            <img src="/media/{{product.7}}" class="product-img">
+                            <h4 class="product-name">{{product.1}}</h4>
+                        </a>
+                        <div class="product-item-author">
+                            <span class="product-author-name">{{product.2}}</span>
+                        </div>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
+                        </div>
+                        <div class="product-item-action">
+                            <span class="price format">Giá: {{product.5}} đ</span>
+                            <span class="product-sold">SL:{{product.6}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <nav aria-label="navigation">
+                <ul class="pagination">
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Previous"
+                        href="?{% if request.GET.category %}category={{ request.GET.category }}{% elif request.GET.info %}info={{ request.GET.info }}&choose={{ request.GET.choose}}{% endif %}&page={{ products.previous_page_number }}"
+                        >
+                            <span aria-hidden="true">&laquo;</span> 
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                    {% if i == products.number %}
+                    <li class="page-item active"><a class="page-link" 
+                        href="?{% if request.GET.category %}category={{ request.GET.category }}{% elif request.GET.info %}info={{ request.GET.info }}&choose={{ request.GET.choose}}{% endif %}&page={{i}}">{{i}}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link"
+                        href="?{% if request.GET.category %}category={{ request.GET.category }}{% elif request.GET.info %}info={{ request.GET.info }}&choose={{ request.GET.choose}}{% endif %}&page={{i}}">{{i}}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <!-- Xử lý quả cồng kềnh -->
+                        <a class="page-link"  aria-label="Next"
+                        href="?{% if request.GET.category %}category={{ request.GET.category }}{% elif request.GET.info %}info={{ request.GET.info }}&choose={{ request.GET.choose}}{% endif %}&page={{ products.next_page_number }}">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
+                </ul>
+              </nav>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="{% static 'css/account/login.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/store/base.css' %}" type="text/css">
+</head>
+
+<body>
+    <div class="login" style="background-image: url('{% static 'img/banner.jpg' %}')">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <a type="button" class="toggle-btn login-btn">Đăng nhập</a>
+                <a type="button" class="toggle-btn register-btn" href="{% url 'account:register' %}">Đăng ký</a>
+            </div>
+            <form id="login" class="input-group" method="POST" action="/login">
+                {% csrf_token %}
+                <div class="input-group-item">
+                    <input type="text" class="input-field" placeholder=" " name="username">
+                    <label class="label-field">Tên đăng nhập</label>
+                </div>
+                <div class="input-group-item">
+                    <input type="password" class="input-field" placeholder=" " name="password">
+                    <label class="label-field">Mật khẩu</label>
+                </div>
+                {% for message in messages %}
+                    <div class="alert alert-danger">{{message}}</div>
+                {% endfor %}
+
+                <div class="input-group-item group-link">
+                    <a class="back-home" href ="{% url 'store:home' %}" >Về trang chủ</a>
+                </div>
+                <button type="submit" class="submit-btn">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

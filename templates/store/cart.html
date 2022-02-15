@@ -1,0 +1,108 @@
+{% load humanize %}
+{% load static %}
+<div class="cart-interface">
+    <div class="your-cart">
+        <h2 class="cart-heading">Giỏ Hàng</h2>
+        <div class="cart-info">
+            <table>
+                <thead>
+                    <tr class="row row-head">
+                        <th class="col-xl-4 col-lg-4">Sản phẩm</th>
+                        <th class="col-xl-2 col-lg-2">Thể loại</th>
+                        <th class="col-xl-2 col-lg-2">Số lượng</th>
+                        <th class="col-xl-3 col-lg-3">Giá</th>
+                        <th class="col-xl-1 col-lg-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cart_item in cart_items %}
+                    <tr class="row row-cart">
+                        {% csrf_token %}
+                        <input type="hidden" type="number" id="product_quantity" value="{{cart_item.product.inventories.quantity}}">
+                        <input type="hidden" name='cart' value="{{cart_item.id}}" class="cart-item-id" >
+                        <td class="col-xl-4 col-lg-4">
+                            <div class="cart-product-info">
+                                {% for image in cart_item.product.images.all %}
+                                    {% if image.main_image is True %}
+                                    <img src="{{image.path.url}}" alt="Mặt trước">
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="cart-product-main">
+                                    <div class="cart-product-heading">
+                                        <h5 class="cart-product-name">{{cart_item.product.title}}</h5>
+                                    </div>
+                                    <div class="cart-product-body">
+                                        <span class="cart-product-desc">{{cart_item.product.auth}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-xl-2 col-lg-2">
+                            <span class="cart-product-category">{{cart_item.product.category}}</span>
+                        </td>
+                        <td class="col-xl-2 col-lg-2">
+                            <div class="cart-product-num">
+                                <button class="btn-sub">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="icon-num bi bi-dash-lg" viewBox="0 0 16 16">
+                                        <path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z" />
+                                    </svg>
+                                </button>
+                                <input name="cart_item_quantity" type="text" class="cart-num" value="{{cart_item.quantity}}"/>
+                                <button class="btn-add">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        fill="currentColor" class="icon-num bi bi-plus-lg" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="col-xl-3 col-lg-3">
+                            <span class="cart-product-price format" >{{cart_item.product.product_price.price}} đồng</span>
+                        </td>
+                        <td class="col-xl-1 col-lg-1">
+                            <button class="btn-remove">Xóa</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4 class="cart-sum">Giá trị đơn hàng: <span id="total" class="format">{{total}}</span> đồng</h4>
+        </div>
+        <form class="form" action="/order" method="POST" onsubmit="return false;">
+            {% csrf_token %}
+            {% for message in messages %}
+                <div class="alert alert-danger" id="error_cart">*{{message}}</div>
+            {% endfor %}
+            <div class="form-submit">
+                <div class="cart-address">
+                    <div class="input-address">
+                        <label class="address-heading">Địa chỉ nhận:</label>
+                        <input type="text" class="address-receive" placeholder="Nhập địa chỉ cụ thể" name="address"
+                            value="{{user.address}}" readonly required>
+                        <div class="alert alert-danger error-address">*Bạn chưa nhập địa chỉ.</div>
+                    </div>
+                    <div class="checkbox-address">
+                        <input type="checkbox" class="checkbox" checked>
+                        <input type="hidden" name="address-default" value="{{user.address}}">
+                        <label class="address-heading">Địa chỉ mặc định</label>
+                    </div>
+                </div>
+            </div>
+            <div class=" cart-submit-wrapper">
+                <button type="submit" class="cart-submit btn-effect">Xác nhận</button>
+                <button type="button" class="cart-out btn-effect">Thoát</button>
+            </div>
+        </form>
+        <div class="no-cart">
+            <img src="{% static 'img/empty.png' %}"
+                alt="" class="no-cart-img">
+            <p class="no-cart-text">Chưa Có Sản Phẩm</p>
+            <div class="cart-submit-wrapper-2">
+                <button class="cart-out btn-effect">Thoát</button>
+            </div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+</div>

@@ -1,0 +1,88 @@
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="{% static 'css/account/register.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/store/base.css' %}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/login_register.js' %}" ></script>
+</head>
+
+<body>
+    <div class="register" style="background-image: url('{% static 'img/banner.jpg'%}')">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <a type="button" class="toggle-btn login-btn" href="{% url 'account:login' %}">Đăng nhập</a>
+                <a type="button" class="toggle-btn register-btn">Đăng ký</a>
+            </div>
+            <form id="register" class="input-group" action="/register" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="input-group-item">
+                            <input type="text" class="input-field" placeholder=" " name="name"
+                                value="" maxlength="50" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class="label-field">Họ và Tên</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;"></div>
+                        <div class="input-group-item">
+                            <input type="phone" class="input-field" placeholder=" " name="username"
+                                value="" maxlength="24" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class=" label-field">Tên đăng nhập</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.username}}</div>
+                        <div class="input-group-item">
+                            <input type="password" class="input-field" placeholder=" " name="password1" maxlength="24" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class="label-field">Mật khẩu</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.password1}}</div>
+                        <div class="input-group-item">
+                            <input type="password" class="input-field" placeholder=" " name="password2" maxlength="24" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class="label-field">Nhập lại mật khẩu</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.password2}}</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input-group-item">
+                            <input type="text" class="input-field" placeholder=" " name="phone" 
+                                value="" maxlength="11" data-type="phone" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class=" label-field">Số điện thoại</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.phone}}</div>
+                        <div class="input-group-item">
+                            <input type="email" class="input-field" placeholder=" " name="email"
+                                value="" maxlength="50" data-type="email" required
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class=" label-field">Email</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.email}}</div>
+                        <div class="input-group-item">
+                            <input type="date" class="input-field" placeholder=" " style="height: 43px;" name="birth" min="1900-01-01"
+                                max="2009-12-31" value="">
+                            <label class=" label-field">Ngày sinh</label>
+                        </div>
+                        <div class="alert alert-danger" style="list-style-type: none;"></div>
+                        <div class="input-group-item">
+                            <input type="text" class="input-field" placeholder=" " name="address"
+                                value="" maxlength="100"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <label class=" label-field">Địa chỉ</label>
+                            <div class="alert alert-danger" style="list-style-type: none;"></div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn mt-20">Đăng ký</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

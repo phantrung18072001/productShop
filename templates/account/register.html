@@ -24,13 +24,6 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="input-group-item">
-                            <input type="text" class="input-field" placeholder=" " name="name"
-                                value="" maxlength="50" required
-                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                            <label class="label-field">Họ và Tên</label>
-                        </div>
-                        <div class="alert alert-danger" style="list-style-type: none;"></div>
-                        <div class="input-group-item">
                             <input type="phone" class="input-field" placeholder=" " name="username"
                                 value="" maxlength="24" required
                                 oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
@@ -65,12 +58,6 @@
                             <label class=" label-field">Email</label>
                         </div>
                         <div class="alert alert-danger" style="list-style-type: none;">{{register_form.errors.email}}</div>
-                        <div class="input-group-item">
-                            <input type="date" class="input-field" placeholder=" " style="height: 43px;" name="birth" min="1900-01-01"
-                                max="2009-12-31" value="">
-                            <label class=" label-field">Ngày sinh</label>
-                        </div>
-                        <div class="alert alert-danger" style="list-style-type: none;"></div>
                         <div class="input-group-item">
                             <input type="text" class="input-field" placeholder=" " name="address"
                                 value="" maxlength="100"

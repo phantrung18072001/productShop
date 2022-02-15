@@ -73,19 +73,13 @@
                 {% if user.is_authenticated %}
                     <div class="nav-logged-in">
                         <div class="nav-user">
-                            <img src="{{user.image.url}}" alt="" class="nav-user-img">
+                            <h4 style="font-size: 12px; margin: 0;">Hi {{ user.username }}</h4>
                             <ul class="nav-user-menu">
                                 {% if user.is_admin %}
                                 <li class="nav-user-item">
                                     <a href="{% url 'adminPage:dashboard' %}">Trang quản trị</a>
                                 </li>
                                 {% endif %}
-                                <li class="nav-user-item">
-                                    <a href="{% url 'account:profile' %}">Thông tin cá nhân</a>
-                                </li>
-                                <li class="nav-user-item">
-                                    <a href="{% url 'store:infoShip' %}">Đơn hàng</a>
-                                </li>
                                 <li class="nav-user-item">
                                     <a href="{% url 'account:logout' %}">Đăng xuất</a>
                                 </li>

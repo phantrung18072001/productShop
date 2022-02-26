@@ -33,85 +33,99 @@
                 <button class = 'type-btn'>Sản phẩm mới</button>
             </div>
             <div class="category-list row trending active">
-                {% for product in productOfDay %}
+                {% for product in discountProducts %}
                 <div class="product-wrapper col-xl-2 col-lg-2">
                     <div class="product-item">
-                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
-                            <img src="/media/{{product.9}}" class="product-img">
-                            <h4 class="product-name">{{product.1}}</h4>
+                        <a href="{% url 'store:detail' product.id %}" class="product-item-link">
+                            {% for image in product.images.all %}
+                                {% if image.main_image is True %}
+                                    <img src="{{image.path.url}}" class="product-img">
+                                {% endif %}
+                            {% endfor %}
+                            <h4 class="product-name">{{product.name}}</h4>
                         </a>
-                        <div class="product-item-author">
-                            <span class="product-author-name">{{product.2}}</span>
-                        </div>
                         <div class="product-item-category">
-                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
-                        </div>
-                        <div class="product-item-action" style="margin-bottom:0px;">
-                            <span class="price format">Giá: {{product.7}}đ</span>
-                            <span class="product-sold">SL: {{product.8}}</span>
-                        </div>
-                        <div class="product-item-action" style="justify-content:center;">
-                            <span class="product-sold">Đã bán trong tuần: {{product.10}}</span>
-                        </div>
-                        <div class="home-product-item__favourite">
-                            <i class="fab fa-hotjar"></i>
-                            Trending
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="category-list row trending">
-                {% for product in productOfMonth %}
-                <div class="product-wrapper col-xl-2 col-lg-2">
-                    <div class="product-item">
-                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
-                            <img src="/media/{{product.9}}" class="product-img">
-                            <h4 class="product-name">{{product.1}}</h4>
-                        </a>
-                        <div class="product-item-author">
-                            <span class="product-author-name">{{product.2}}</span>
-                        </div>
-                        <div class="product-item-category">
-                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
-                        </div>
-                        <div class="product-item-action" style="margin-bottom:0px;">
-                            <span class="price format">Giá: {{product.7}}đ</span>
-                            <span class="product-sold">SL: {{product.8}}</span>
-                        </div>
-                        <div class="product-item-action" style="justify-content:center;">
-                            <span class="product-sold">Đã bán trong tháng: {{product.10}}</span>
-                        </div>
-                        <div class="home-product-item__favourite">
-                            <i class="fab fa-hotjar"></i>
-                            Trending
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="category-list row trending">
-                {% for product in newproduct %}
-                <div class="product-wrapper col-xl-2 col-lg-2">
-                    <div class="product-item">
-                        <a href="{% url 'store:productPage' product.0 %}" class="product-item-link">
-                            <img src="/media/{{product.9}}" class="product-img">
-                            <h4 class="product-name">{{product.1}}</h4>
-                        </a>
-                        <div class="product-item-author">
-                            <span class="product-author-name">{{product.2}}</span>
-                        </div>
-                        <div class="product-item-category">
-                            <p class="ddc-code">Thể loại: <span>{{product.3}}</span></p>
+                            <p class="ddc-code">Thể loại: <span>{{product.category_id.name}}</span></p>
                         </div>
                         <div class="product-item-action">
-                            <span class="price format">Giá: {{product.7}}đ</span>
-                            <span class="product-sold">SL: {{product.8}}</span>
+                            <span class="price format">Giá: {{product.price}}đ</span>
+                            <span class="product-sold">SL: {{product.inven.quantity}}</span>
+                        </div>
+                        {% if product.discount_id and product.discount_id.is_active %}
+                        <div class="home-product-item__sale">
+                            <span class="home-product-item__sale-percent">{{ product.discount_id.discount_percent }}</span>
+                            <span class="home-product-item__sale-title">GIẢM</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="category-list row trending">
+                {% for product, sold in trendingProducts %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:detail' product.id %}" class="product-item-link">
+                            {% for image in product.images.all %}
+                                {% if image.main_image is True %}
+                                    <img src="{{image.path.url}}" class="product-img">
+                                {% endif %}
+                            {% endfor %}
+                            <h4 class="product-name">{{product.name}}</h4>
+                        </a>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.category_id.name}}</span></p>
+                        </div>
+                        <div class="product-item-action">
+                            <span class="price format">Giá: {{product.price}}đ</span>
+                            <span class="product-sold">SL: {{product.inven.quantity}}</span>
+                        </div>
+                        <div class="product-item-action" style="justify-content:center;">
+                            <span class="product-sold">Đã bán trong tháng: {{sold}}</span>
+                        </div>
+                        <div class="home-product-item__favourite">
+                            <i class="fab fa-hotjar"></i>
+                            Trending
+                        </div>
+                        {% if product.discount_id and product.discount_id.is_active %}
+                        <div class="home-product-item__sale">
+                            <span class="home-product-item__sale-percent">{{ product.discount_id.discount_percent }}</span>
+                            <span class="home-product-item__sale-title">GIẢM</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="category-list row trending">
+                {% for product in newProducts %}
+                <div class="product-wrapper col-xl-2 col-lg-2">
+                    <div class="product-item">
+                        <a href="{% url 'store:detail' product.id %}" class="product-item-link">
+                            {% for image in product.images.all %}
+                                {% if image.main_image is True %}
+                                    <img src="{{image.path.url}}" class="product-img">
+                                {% endif %}
+                            {% endfor %}
+                            <h4 class="product-name">{{product.name}}</h4>
+                        </a>
+                        <div class="product-item-category">
+                            <p class="ddc-code">Thể loại: <span>{{product.category_id.name}}</span></p>
+                        </div>
+                        <div class="product-item-action">
+                            <span class="price format">Giá: {{product.price}}đ</span>
+                            <span class="product-sold">SL: {{product.inven.quantity}}</span>
                         </div>
                         <div class="home-product-item__favourite">
                             <i class="fas fa-check"></i>
                             New
                         </div>
+                        {% if product.discount_id and product.discount_id.is_active %}
+                        <div class="home-product-item__sale">
+                            <span class="home-product-item__sale-percent">{{ product.discount_id.discount_percent }}</span>
+                            <span class="home-product-item__sale-title">GIẢM</span>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -120,32 +134,33 @@
         {% for category, products in context.items %}         
         <div class="section">
             <div class="content-heading">
-                <h3>Sản phẩm {{category}}</h3>
+                <h3>Máy tính {{category}}</h3>
             </div>
             <div class="category-list row">
                 {% for product in products %}
                 <div class="product-wrapper col-xl-2 col-lg-2">
                     <div class="product-item">
-                        <a href="{% url 'store:productPage' product.id %}" class="product-item-link">
-                            <!-- Lâu, chưa tối ưu khi có nhiều ảnh
-                                làm sao để get một ảnh main duy nhất -->
+                        <a href="{% url 'store:detail' product.id %}" class="product-item-link">
                             {% for image in product.images.all %}
                                 {% if image.main_image is True %}
                                     <img src="{{image.path.url}}" class="product-img">
                                 {% endif %}
                             {% endfor %}
-                            <h4 class="product-name">{{product.title}}</h4>
+                            <h4 class="product-name">{{product.name}}</h4>
                         </a>
-                        <div class="product-item-author">
-                            <span class="product-author-name">{{product.auth}}</span>
-                        </div>
                         <div class="product-item-category">
                             <p class="ddc-code">Thể loại: <span>{{category}}</span></p>
                         </div>
                         <div class="product-item-action">
-                            <span class="price format">Giá: {{product.product_price.price}}đ</span>
-                            <span class="product-sold">SL: {{product.inventories.quantity}}</span>
+                            <span class="price format">Giá: {{product.price}}đ</span>
+                            <span class="product-sold">SL: {{product.inven.quantity}}</span>
                         </div>
+                        {% if product.discount_id and product.discount_id.is_active %}
+                        <div class="home-product-item__sale">
+                            <span class="home-product-item__sale-percent">{{ product.discount_id.discount_percent }}</span>
+                            <span class="home-product-item__sale-title">GIẢM</span>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}

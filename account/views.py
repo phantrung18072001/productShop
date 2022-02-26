@@ -18,7 +18,7 @@ def login(request):
             return redirect('store:home')
         else:
             messages.error(request,"Sai thông tin đăng nhập")
-            return redirect('accounts:login')
+            return redirect('account:login')
     return render(request,'account/login.html')
 
 def register(request):

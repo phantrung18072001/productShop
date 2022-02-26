@@ -14,3 +14,36 @@ body {
     }
 }
 
+.home-product-item__sale {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 216, 64, 0.94);
+    text-align: center;
+}
+
+.home-product-item__sale::before {
+    content: "";
+    position: absolute;
+    border-width: 0 20px 5px;
+    top: 100%;
+    left: 0;
+    border-style: solid;
+    border-color: transparent rgba(255, 216, 64, 0.94) transparent rgba(255, 216, 64, 0.94);
+}
+
+.home-product-item__sale-percent {
+    color: #EE4D2D;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.home-product-item__sale-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: -4px;
+    display: block;
+}

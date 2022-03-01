@@ -11,13 +11,13 @@ def add_variable_to_context(request):
             cart_items = CartItem.objects.filter(cart_id=cart)
             for cart_item in cart_items:
                 count += 1
-                # if cart_item.p.book_price:
-                #     total += cart_item.quantity * cart_item.book.book_price.price
+            total = cart.total
         except Cart.DoesNotExist:
             cart = None
+            total = 0
     return {
-        # 'cart_items':cart_items,
+        'cart_items':cart_items,
         'categories': categories,
-        # 'total': total,
-        # 'count': count,
+        'total': total ,
+        'count': count,
     }

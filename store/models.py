@@ -57,14 +57,14 @@ class Cart(models.Model):
     total = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True) 
     def __str__(self): 
-        return str(self.user)
+        return str(self.user_id)
 
 class CartItem(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE) 
     cart_id = models.ForeignKey(Cart, on_delete=models.CASCADE) 
     quantity = models.IntegerField() 
     def __str__(self): 
-        return str(self.book)
+        return str(self.product_id)
 
 STATUS_ORDER = (
     ('Chờ xử lý','Chờ xử lý'),

@@ -31,9 +31,6 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:product_Add' %}"><i class="mdi mdi-plus-circle"></i>Thêm</a></li>
               </ul>
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_Update' %}"><i class="mdi mdi-sync"></i>Cập nhật</a></li>
-              </ul>
             </div>
           </li>
           <li class="nav-item">
@@ -59,24 +56,24 @@
               <div class="col-md-4 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Bìa Sản phẩm</h4>
+                    <h4 class="card-title">Ảnh sản phẩm</h4>
                       <div class="form-group">
-                        <label for="FrontCover">Bìa trước</label>
-                        <div class="form-group" id="displayFrontCover" style="background-image: url('/media/{{ product.3.0 }}'); width: auto;"></div>                    
+                        <label for="FrontCover">Ảnh 1</label>
+                        <div class="form-group" id="displayFrontCover" style="background-image: url('/media/{{ product.images.all.0.path }}'); width: auto;"></div>                    
                         <input type="file" id="FrontCover" name="FrontCover_Image" class="file-upload-default">
                         <div class="input-group col-xs-12">
-                          <input type="text" id="FrontCover_Image" class="form-control file-upload-info" disabled value="{{ product.3.0 }}" required>
+                          <input type="text" id="FrontCover_Image" class="form-control file-upload-info" disabled value="{{ product.images.all.0.path }}" required>
                           <span class="input-group-append">
                             <button class="file-upload-browse btn btn-primary" type="button">Tải lên</button>
                           </span>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="BackCover">Bìa sau</label>
-                        <div class="form-group" id="displayBackCover" style="background-image: url('/media/{{ product.3.1 }}'); width: auto;"></div>                    
+                        <label for="BackCover">Ảnh 2</label>
+                        <div class="form-group" id="displayBackCover" style="background-image: url('/media/{{ product.images.all.1.path }}'); width: auto;"></div>                    
                         <input type="file" id="BackCover" name="BackCover_Image" class="file-upload-default">
                         <div class="input-group col-xs-12">
-                          <input type="text" id="BackCover_Image" class="form-control file-upload-info" disabled value="{{ product.3.1 }}" required>
+                          <input type="text" id="BackCover_Image" class="form-control file-upload-info" disabled value="{{ product.images.all.1.path }}" required>
                           <span class="input-group-append">
                             <button class="file-upload-browse btn btn-primary" type="button">Tải lên</button>
                           </span>
@@ -93,7 +90,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="productID">ID</label>
-                            <input type="text" class="form-control" id="productID" name="id" value="{{product.0.0.0}}" />
+                            <input type="text" class="form-control" id="productID" name="id" value="{{product.id}}" />
                           </div>
                         </div>
                       </div>
@@ -101,27 +98,51 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="productTitle">Tên Sản phẩm</label>
-                            <input type="text" class="form-control" id="productTitle" name="title" value="{{product.0.0.1}}" required/>
+                            <input type="text" class="form-control" id="productTitle" name="name" value="{{product.name}}" required/>
                           </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label for="productAuthor">Tác giả</label>
-                            <input type="text" class="form-control" id="productAuthor" name="auth" value="{{product.0.0.2}}" required/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="productCategory">Phân loại</label>
+                            <label for="productCategory">Hãng</label>
                             <select style="display: block;" class="form-control" id="productCategory" name="category">
                               {% for category in categories %}
-                                <option value="{{ category.0 }}" {% if category.1 == product.0.0.3 %} selected = "selected" {% endif %}>{{ category.1 }}</option>
+                                <option value="{{ category.id }}" {% if category.id == product.category_id.id %} selected = "selected" {% endif %}>{{ category.name }}</option>
                               {% endfor %}
                             </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productAuthor">RAM</label>
+                            <input type="text" class="form-control" name="RAM" value="{{product.RAM}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productAuthor">CPU</label>
+                            <input type="text" class="form-control" name="CPU" value="{{product.CPU}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productAuthor">Card đồ họa</label>
+                            <input type="text" class="form-control" name="Card" value="{{product.Card}}" required/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="productAuthor">Màn hình</label>
+                            <input type="text" class="form-control" name="Screen" value="{{product.Screen}}" required/>
                           </div>
                         </div>
                       </div>
@@ -129,37 +150,19 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="productPrice">Giá</label>
-                            <input type="text" class="form-control" id="productPrice" name="price" value="{{product.2.0}}" required/>
+                            <input type="text" class="form-control" id="productPrice" name="price" value="{{product.price}}" required/>
                           </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label for="productPublisher">Nhà xuất bản</label>
-                            <input type="text" class="form-control" id="productPublisher" name="publisher" value="{{product.0.0.4}}" required/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="productCountry">Quốc gia</label>
-                            {% load countries %}
-                            {% get_countries as countries %}
-                            <select style="display: block;" class="form-control" id="productCountry" name="country">
-                              {% for country in countries %}
-                                <option value="{{ country.code }}" {% if country.code == product.0.0.5 %} selected = "selected" {% endif %}>{{ country.name }}</option>
+                            <label for="productCategory">Khuyến mãi</label>
+                            <select style="display: block;" class="form-control" id="productCategory" name="discount">
+                              {% for discount in discounts %}
+                                <option value="{{ discount.id }}" {% if discount.id == product.discount_id.id %} selected = "selected" {% endif %}>{{ discount.name }} - {{ discount.discount_percent }}%</option>
                               {% endfor %}
                             </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="productYearPublish">Năm phát hành</label>
-                            <input type="text" class="form-control" id="productYearPublish" name="year_publish" value="{{product.0.0.6}}" required/>
                           </div>
                         </div>
                       </div>
@@ -167,7 +170,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="productQuantity">Số lượng</label>
-                            <input type="text" class="form-control" id="productQuantity" name="quantity" value="{{product.1.0}}" required/>
+                            <input type="text" class="form-control" id="productQuantity" name="quantity" value="{{product.inven.quantity}}" required/>
                           </div>
                         </div>
                       </div>
@@ -175,7 +178,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="productDescription">Mô tả</label>
-                            <textarea class="form-control" id="productDescription" name="description" rows="12" required>{{product.0.0.7}}</textarea>
+                            <textarea class="form-control" id="productDescription" name="description" rows="12" required>{{product.desc}}</textarea>
                           </div>
                         </div>
                       </div>
@@ -205,7 +208,7 @@
   <script src="{% static 'js/admin/select2.js' %}"></script>
   <script>
     returnproducts_Update = function() {
-      window.location.href = "{% url 'adminPage:products_Update' %}";
+      window.location.href = "{% url 'adminPage:products_List' %}";
     }
 
     submitForm = function() {

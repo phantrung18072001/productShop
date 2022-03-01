@@ -10,14 +10,11 @@ $(document).ready(function() {
             count += 1;
             html += "<tr class='clickable-row' style='white-space: pre; text-align: center;'>";
             html += "<td>" + count + "</td>";
-            html += "<td style='display: none;'>" + product[0] + "</td>";
-            for (let i = 1; i < product.length-1; i++) {
-                if (i == 5) {
-                    html += "<td>" + format(product[i]) + ' VNĐ' + "</td>";
-                } else {
-                    html += "<td>" + product[i] + "</td>";
-                }
-            }
+            html += "<td style='display: none;' id='product'>" + product.id + "</td>";
+            html += "<td>" + product.name + "</td>";
+            html += "<td>" + product.category + "</td>";
+            html += "<td>" + product.price + " đồng</td>";
+            html += "<td>" + product.inventory + "</td>";
             html += "</tr>"
         }
         $(".table-product tbody").html(html);
@@ -26,7 +23,6 @@ $(document).ready(function() {
 
     form.on("submit", function(){
         var info = $("input[name='info']")[0].value;
-        var choose = $("select[name='choose']").find(":selected").val();
         if (info.trim() == "") {
             location.reload(true);
         } else {
@@ -35,7 +31,6 @@ $(document).ready(function() {
                 url : "/shelf",
                 data : {
                     'info': info,
-                    'choose': choose,
                 },
                 dataType : 'json',
                 success : function(response) {
@@ -50,7 +45,7 @@ $(document).ready(function() {
     function load(){
         $('.clickable-row').on('click', function () {
             var currentRow=$(this).closest('tr');
-            var product_id = parseInt(currentRow.find("td:eq(1)").text());
+            var product_id = parseInt(currentRow.find("#product").text());
             console.log(product_id);
             document.getElementById("productUpdate").setAttribute("value", product_id);
             document.getElementById("productInfo").setAttribute("action", "/product_Modify");

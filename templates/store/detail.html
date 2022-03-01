@@ -11,8 +11,8 @@
     <div id="content" class="content section container">
         <div class="breadcrumb">
             <a class="breadcrumb-item" href="{% url 'store:home' %}">Trang chủ</a>
-            <a class="breadcrumb-item">{{product.category}}</a>
-            <a class="breadcrumb-item">{{product.title}}</a>
+            <a class="breadcrumb-item">{{product.category_id.name}}</a>
+            <a class="breadcrumb-item">{{product.name}}</a>
         </div>
         <div class="single-product row">
             <div class="single-product-img col-xl-4 col-lg-4">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="product-main col-xl-8 col-lg-8">
-                <form action="" method="POST">
+                <form action="{% url 'store:add_cart' product.id %}" method="POST">
                     {% csrf_token %}
                     <h2 class="product-heading">{{product.title}}</h2>
                     <h3 class="product-author">{{product.auth}}</h3>
@@ -34,29 +34,35 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>Nhà xuất bản</td>
-                                    <td>{{product.publisher}}</td>
+                                    <td>Tên sản phẩm</td>
+                                    <td>{{product.name}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Quốc gia</td>
-                                    <td>{{product.country.name}}</td>
+                                    <td>CPU</td>
+                                    <td>{{product.CPU}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Thể loại</td>
-                                    <td>{{product.category}}</td>
+                                    <td>RAM</td>
+                                    <td>{{product.RAM}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Năm phát hành</td>
-                                    <td>{{product.year_publish}}</td>
+                                    <td>Hãng máy tính</td>
+                                    <td>{{product.category_id.name}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Số lượng sản phẩm còn lại</td>
-                                    <td class="quantity">{{product.inventories.quantity}}</td>
+                                    <td>Số lượng sản phẩm</td>
+                                    <td class="quantity">{{product.inven.quantity}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Giá sản phẩm</td>
-                                    <td class="format">{{product.product_price.price}} đồng</td>
+                                    <td>Giá gốc</td>
+                                    <td class="format">{{product.price}} đồng</td>
                                 </tr>
+                                {% if product.discount_id and product.discount_id.is_active %}
+                                <tr>
+                                    <td>Khuyến mãi</td>
+                                    <td class="format">{{product.discount_id.discount_percent}}%</td>
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -94,32 +100,12 @@
         <div class="product-review">
             <h3 class="product-review-heading">Đặc điểm nổi bật</h3>
             <div class="product-review-main">
-                <p>{{product.description}}</p>
+                <p>{{product.desc}}</p>
             </div>
         </div>
-        <!-- <div class="same-category">
-            <h3 class="same-category-heading">sản phẩm cùng thể loại</h3>
-            <div class="same-category-list row">
-                <div class="product-wrapper col-xl-2 col-lg-2">
-                    <div class="product-item">
-                        <a href="" class="product-item-link">
-                            <img src="{% static 'img/product1.jpg' %}" class="product-img">
-                            <h4 class="product-name">sản phẩm 2</h4>
-                        </a>
-                        <div class="product-item-author">
-                            <span class="product-author-name">Shiba</span>
-                        </div>
-                        <div class="product-item-action">
-                            <p class="ddc-code">Thể loại: <span>Kinh dị</span></p>
-                            <span class="product-sold">SL: 10</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/productPage.js' %}"></script>
+    <script src="{% static 'js/detail.js' %}"></script>
 {% endblock %}

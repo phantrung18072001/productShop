@@ -30704,3 +30704,36 @@ div.tagsinput span.tag a {
 .nav-link > i {
   margin-right: 10px;
 }
+
+
+.table thead th {
+    font-size: 15px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table tbody td {
+    font-size: 15px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+    border-top: none;
+}
+
+.list-product {
+    list-style: none;
+    margin: 0;
+}
+
+.product {
+    display: flex;
+}
+
+.product .title {
+    flex: 1;
+    margin-right: 8px;
+}
+
+.product .quantity {
+  color: #dd125f;
+  font-weight: bold;
+}

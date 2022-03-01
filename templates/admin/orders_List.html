@@ -22,8 +22,8 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="products">
-              <i class="icon-product menu-icon"></i>
-              <span class="menu-title">sản phẩm</span>
+              <i class="icon-book menu-icon"></i>
+              <span class="menu-title">Sản phẩm</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="products">
@@ -32,9 +32,6 @@
               </ul>
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:product_Add' %}"><i class="mdi mdi-plus-circle"></i>Thêm</a></li>
-              </ul>
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_Update' %}"><i class="mdi mdi-sync"></i>Cập nhật</a></li>
               </ul>
             </div>
           </li>
@@ -67,45 +64,54 @@
                           <thead>
                             <tr style="white-space: pre; text-align: center;">
                               <th>STT</th>
-                              <th>Username</th>
-                              <th>sản phẩm</th>
+                              <th>Tên</th>
+                              <th>Sản phẩm</th>
                               <th>Giá</th>
                               <th>Ngày đặt</th>
                               <th>Ngày nhận</th>
-                              <th>Địa chỉ</th>
+                              <th style="min-width: 85px;">Địa chỉ</th>
                               <th>Trạng thái</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <script>
-                              var buttonID;
-                              var formID;
-                              var currentStatusID;
-                              var count = 0;
-                              var currentRow;
-                              var orderID;
-                              var status;
-                            </script>
-                            {% for order in orders_Info %}
+                            {% for order in orders %}
                             <form  id="formTarget" enctype="multipart/form-data" method="POST" action="{% url 'adminPage:statusChange' %}">  
                               {% csrf_token %}
-                              <tr class="clickable-row" style="text-align: center;">
-                                {% for info in order %}
-                                  {% if forloop.counter != 9 %}
-                                    {% if forloop.counter != 2 %}
-                                    <td style="white-space: pre;">{{ info }}</td>
-                                    {% else %}
-                                    <input type='text' style="display: none;" name="orderID" value="{{ info }}"></input>
-                                    {% endif %}
-                                  {% elif forloop.counter %}
+                              <tr class="clickable-row order_row" style="text-align: center;">
+                                    <td class="stt"></td>
+                                    <td>{{ order.user_id.username }}</td>
+                                    <td>
+                                      <ul class="list-product">
+                                          {% for order_item in order.order_item.all %}
+                                          <li class="product">
+                                              <span class="title">{{order_item.product_id.name}}</span>
+                                              <span class="quantity">x{{order_item.quantity}}</span>
+                                          </li>
+                                          {% endfor %}
+                                      </ul>
+                                    </td>
+                                    <td>{{ order.total }} đồng</td>
+                                    <td>
+                                      <input type="datetime" style="width: 100px; padding: 0 9px;" 
+                                          name="" value='{{order.created_at|date:"d-m-Y"}}' disabled>
+                                    </td>
+                                    <td>
+                                      {% if order.status == 'Hoàn thành' %}
+                                          <input type="datetime" style="width: 100px; padding: 0 9px;" 
+                                          name="" value='{{order.updated_at|date:"d-m-Y"}}' disabled>                                
+                                      {% endif %}
+                                    </td>
+                                    <td>{{order.address}}</td>
+                                    <input type='text' hidden name="orderID" value="{{ order.id }}"></input>
                                     <td style="justify-self: center;">
                                       <div class="dropdown">
-                                        <input id="currentStatus" type='text' style="display: none;" name="newStatus" value="{{ info.0 }}"></input>
-                                        <button class="btn btn-primary btn-sm dropdown-toggle dropdown-btn" type="button" id="dropdown_Button" name="statusChange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ info.0 }}</button>
+                                        <input id="currentStatus" type='text' style="display: none;" name="newStatus" value="{{ order.status }}"></input>
+                                        <button class="btn btn-primary btn-sm dropdown-toggle dropdown-btn" type="button" id="dropdown_Button" name="statusChange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ order.status }}</button>
                                         <div class="dropdown-menu" aria-labelledby="dropdown_Button">
-                                          <a class="dropdown-item btn-item1" style="cursor: pointer;">{{ info.1 }}</a>
-                                          <a class="dropdown-item btn-item2" style="cursor: pointer;">{{ info.2 }}</a>
-                                          <a class="dropdown-item btn-item3" style="cursor: pointer;">{{ info.3 }}</a>
+                                          <a class="dropdown-item btn-item1" style="cursor: pointer;">Chờ xác nhận</a>
+                                          <a class="dropdown-item btn-item1" style="cursor: pointer;">Đang vận chuyển</a>
+                                          <a class="dropdown-item btn-item2" style="cursor: pointer;">Hoàn thành</a>
+                                          <a class="dropdown-item btn-item3" style="cursor: pointer;">Đã hủy</a>
                                         </div>
                                       </div>
                                       <script>
@@ -118,8 +124,6 @@
                                         uniqueButton();
                                       </script>
                                     </td>
-                                  {% endif %}
-                                {% endfor %} 
                               </tr>
                             </form>
                             {% endfor %} 
@@ -173,6 +177,17 @@
       $(formID).submit();
       alert("Cập nhật trạng thái đơn hàng thành công!");
     });
+    $(document).ready(function() {
+    let order = $('.order_row');
 
+    if(order.length == 0) {
+        $('.empty-order').show();
+        $('.history').hide();
+    }
+
+    order.each(function(index){
+        $(this).find('.stt')[0].textContent = index+1;
+    })
+});
   </script>  
 {% endblock %}

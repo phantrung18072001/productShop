@@ -1,0 +1,76 @@
+{% extends "./base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} Lịch sử mua hàng {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static './css/store/infoShip.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="order-history container">
+        <div class="empty-order">
+            <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/cart/9bdd8040b334d31946f49e36beaf32db.png"
+                    alt="" class="no-order-img">
+            <p class="no-order-text">Bạn chưa có đơn hàng nào</p>
+        </div>
+        <div class="history">
+            <h3>Lịch sử mua hàng</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th class="col-xl-1">STT</th>
+                        <th class="col-xl-2">Sản phẩm</th>
+                        <th class="col-xl-2">Giá tiền</th>
+                        <th class="col-xl-2">Ngày đặt</th>
+                        <th class="col-xl-2">Ngày nhận</th>
+                        <th class="col-xl-3">Địa chỉ</th>
+                        <th class="col-xl-2">Trạng thái</th>
+                        <th class="col-xl-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr class="row order_row">
+                        <td class="col-xl-1 stt"></td>
+                        <td class="col-xl-2">
+                            <ul class="list-product">
+                                {% for order_item in order.order_item.all %}
+                                <li class="product">
+                                    <span class="title">{{order_item.product_id.name}}</span>
+                                    <span class="quantity">x{{order_item.quantity}}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td class="col-xl-2 format">{{order.total}} đồng</td>
+                        <td class="col-xl-2">
+                            <input type="datetime" style="width: 100px; padding: 0 9px;" 
+                                name="" value='{{order.created_at|date:"d-m-Y"}}' disabled>
+                        </td>
+                        <td class="col-xl-2">
+                            {% if order.status == 'Hoàn thành' %}
+                                <input type="datetime" style="width: 100px; padding: 0 9px;" 
+                                name="" value='{{order.updated_at|date:"d-m-Y"}}' disabled>                                
+                            {% endif %}
+                        </td>
+                        <td class="col-xl-3">{{order.address}}</td>
+                        <td class="col-xl-2">
+                            <span>{{order.status}}</span>
+                        </td>
+                        <td class="col-xl-1">
+                            {% if order.status == 'Chờ xử lý'%}
+                            <a href="{% url 'store:update_order' order.id %}" class='cancel'>Hủy</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/infoShip.js' %}"></script>
+{% endblock %}

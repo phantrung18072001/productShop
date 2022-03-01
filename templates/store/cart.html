@@ -7,10 +7,11 @@
             <table>
                 <thead>
                     <tr class="row row-head">
-                        <th class="col-xl-4 col-lg-4">Sản phẩm</th>
-                        <th class="col-xl-2 col-lg-2">Thể loại</th>
+                        <th class="col-xl-3 col-lg-3">Sản phẩm</th>
+                        <th class="col-xl-2 col-lg-2">Hãng</th>
                         <th class="col-xl-2 col-lg-2">Số lượng</th>
-                        <th class="col-xl-3 col-lg-3">Giá</th>
+                        <th class="col-xl-2 col-lg-2">Giá</th>
+                        <th class="col-xl-2 col-lg-2">Khuyến mãi</th>
                         <th class="col-xl-1 col-lg-1"></th>
                     </tr>
                 </thead>
@@ -18,27 +19,24 @@
                     {% for cart_item in cart_items %}
                     <tr class="row row-cart">
                         {% csrf_token %}
-                        <input type="hidden" type="number" id="product_quantity" value="{{cart_item.product.inventories.quantity}}">
+                        <input type="hidden" type="number" id="product_quantity" value="{{cart_item.product_id.inven.quantity}}">
                         <input type="hidden" name='cart' value="{{cart_item.id}}" class="cart-item-id" >
-                        <td class="col-xl-4 col-lg-4">
+                        <td class="col-xl-3 col-lg-3">
                             <div class="cart-product-info">
-                                {% for image in cart_item.product.images.all %}
+                                {% for image in cart_item.product_id.images.all %}
                                     {% if image.main_image is True %}
                                     <img src="{{image.path.url}}" alt="Mặt trước">
                                     {% endif %}
                                 {% endfor %}
                                 <div class="cart-product-main">
                                     <div class="cart-product-heading">
-                                        <h5 class="cart-product-name">{{cart_item.product.title}}</h5>
-                                    </div>
-                                    <div class="cart-product-body">
-                                        <span class="cart-product-desc">{{cart_item.product.auth}}</span>
+                                        <h5 class="cart-product-name">{{cart_item.product_id.name}}</h5>
                                     </div>
                                 </div>
                             </div>
                         </td>
                         <td class="col-xl-2 col-lg-2">
-                            <span class="cart-product-category">{{cart_item.product.category}}</span>
+                            <span class="cart-product-category">{{cart_item.product_id.category_id.name}}</span>
                         </td>
                         <td class="col-xl-2 col-lg-2">
                             <div class="cart-product-num">
@@ -58,8 +56,15 @@
                                 </button>
                             </div>
                         </td>
-                        <td class="col-xl-3 col-lg-3">
-                            <span class="cart-product-price format" >{{cart_item.product.product_price.price}} đồng</span>
+                        <td class="col-xl-2 col-lg-2">
+                            <span class="cart-product-price format" >{{cart_item.product_id.price}} đồng</span>
+                        </td>
+                        <td class="col-xl-2 col-lg-2">
+                            {% if cart_item.product_id.discount_id and cart_item.product_id.discount_id.is_active %}
+                            <span class="cart-product-price format" >{{cart_item.product_id.discount_id.discount_percent}}%</span>
+                            {% else %}
+                            <span class="cart-product-price format" >Không có khuyến mãi</span>
+                            {% endif %}
                         </td>
                         <td class="col-xl-1 col-lg-1">
                             <button class="btn-remove">Xóa</button>

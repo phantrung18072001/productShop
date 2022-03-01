@@ -2,7 +2,7 @@
 {% load static %}
 {% block title%} Danh Sản phẩm các Sản phẩm {% endblock %}
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'js/admin/dataTables.bootstrap4.css' %}">
+  <link rel="stylesheet" href="{% static 'js/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'js/admin/select.dataTables.min.css' %}">
   <link rel="stylesheet" href="{% static 'js/admin/vendors/select2/select2.min.css' %}">
   <link rel="stylesheet" href="{% static 'js/admin/vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
@@ -22,7 +22,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="products">
-              <i class="icon-product menu-icon"></i>
+              <i class="icon-book menu-icon"></i>
               <span class="menu-title">Sản phẩm</span>
               <i class="menu-arrow"></i>
             </a>
@@ -32,9 +32,6 @@
               </ul>
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:product_Add' %}"><i class="mdi mdi-plus-circle"></i>Thêm</a></li>
-              </ul>
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_Update' %}"><i class="mdi mdi-sync"></i>Cập nhật</a></li>
               </ul>
             </div>
           </li>
@@ -59,51 +56,44 @@
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Thông tin Sản phẩm</p>
+                    <p class="card-title">Cập nhật Thông tin Sản phẩm</p>
                     <div class="nav-search">
-                      <form action="" class="form-search-product" autocomplete="off">
-                          <input type="text" name="info" class="search-input" placeholder="Nhập vào để tìm kiếm">
-                          <div class="select-wrapper">
-                              <select name="choose" class="select-filter-product"
-                                  style="background-image: url()">
-                                  <option value="title" selected>Tìm theo tên Sản phẩm</option>
-                                  <option value="auth">Tìm theo tên tác giả</option>
-                              </select>
-                          </div>
-                          <button class="btn-search">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" stroke-width="6" fill="currentColor"
-                                  class="icon-search bi bi-search" viewBox="0 0 16 16">
-                                  <path
-                                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                              </svg>
-                          </button>
-                      </form>
-                  </div>
-                  <div class="row">
+                    <form action="" class="form-search-product" autocomplete="off">
+                        <input type="text" name="info" class="search-input" placeholder="Nhập vào để tìm kiếm">
+                        <button class="btn-search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" stroke-width="6" fill="currentColor"
+                                class="icon-search bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </button>
+                    </form>
+                    </div>
+                    <form class="form-sample" id="productInfo" enctype="multipart/form-data" method="POST" action="">
+                        {% csrf_token %}
+                        <input style="display: none;" value="" id="productUpdate" name="productID">
+                    <div class="row">
                     <div class="col-12">
                       <div class="table-responsive">
-                        <table id="" class="table-product display expandable-table table-striped table-hover" style="width:100%">
+                        <table id="" class="table-product display expandable-table table-striped table-hover" style="width:100%; cursor: pointer;">
                           <thead>
                             <tr style="white-space: pre; text-align: center;">
                               <th>STT</th>
-                              <th>Tên Sản phẩm</th>
-                              <th>Tác giả</th>
-                              <th>Phân loại</th>
-                              <th>Năm phát hành</th>
+                              <th>Tên sản phẩm</th>
+                              <th>Hãng</th>
                               <th>Giá</th>
                               <th>Số lượng</th>
                             </tr>
                           </thead>
                           <tbody>
                             {% for product in products %}  
-                              <tr style="white-space: pre; text-align: center;">
-                                  <td>{{ product.0 }}</td>
-                                  <td>{{ product.1 }}</td>
-                                  <td>{{ product.2 }}</td>
-                                  <td>{{ product.3 }}</td>
-                                  <td>{{ product.6 }}</td>
-                                  <td>{{ product.7 }}</td>
-                                  <td>{{ product.8 }}</td>
+                              <tr class="clickable-row" style="white-space: pre; text-align: center;">
+                                <td class="stt"></td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.category_id.name }}</td>
+                                <td>{{ product.price }} đồng</td>
+                                <td>{{ product.inven.quantity }}</td>
+                                <td style="display: none;" id="product">{{ product.id }}</td>
                               </tr>
                             {% endfor %} 
                           </tbody>
@@ -116,20 +106,39 @@
             </div>
           </div>
         </div>
+      </form>
         <!-- content-wrapper ends -->
       </div>
       <!-- main-panel ends -->
     </div>
+    <!-- page-body-wrapper ends -->
+  <!-- container-scroller -->
 {% endblock %}
 
 {% block extra_js %}
   <!-- Plugin js for this page -->
+  <script src="{% static 'js/admin/vendors/datatables.net/jquery.dataTables.js' %} "></script>
+  <script src="{% static 'js/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+  <script src="{% static 'js/admin/dataTables.select.min.js' %}"></script>
   <script src="{% static 'js/admin/vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
   <script src="{% static 'js/admin/vendors/select2/select2.min.js' %}"></script>
-
   <!-- Custom js for this page-->
   <script src="{% static 'js/admin/search_product.js' %}"></script>
   <script src="{% static 'js/admin/typeahead.js' %}"></script>
   <script src="{% static 'js/admin/select2.js' %}"></script>
-{% endblock %}
 
+  <script>
+    $(document).ready(function() {
+      let row = $('.clickable-row');
+
+      if(row.length == 0) {
+          $('.empty-order').show();
+          $('.history').hide();
+      }
+
+      row.each(function(index){
+          $(this).find('.stt')[0].textContent = index+1;
+      })
+    })
+  </script>
+{% endblock %}

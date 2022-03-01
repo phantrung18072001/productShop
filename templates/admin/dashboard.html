@@ -31,9 +31,6 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:product_Add' %}"><i class="mdi mdi-plus-circle"></i>Thêm</a></li>
               </ul>
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{% url 'adminPage:products_Update' %}"><i class="mdi mdi-sync"></i>Cập nhật</a></li>
-              </ul>
             </div>
           </li>
           <li class="nav-item">
@@ -60,13 +57,6 @@
                   <img src="{% static 'img/admin/people.png' %}" alt="people">
                   <div class="weather-info">
                     <div class="d-flex">
-                      <div>
-                        <h2 class="mb-0 font-weight-normal"><i class="icon-sun mr-2"></i>25<sup>C</sup></h2>
-                      </div>
-                      <div class="ml-2">
-                        <h4 class="location font-weight-normal">Hà Nội</h4>
-                        <h6 class="font-weight-normal">Vietnam</h6>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -96,7 +86,7 @@
                   <div class="card card-light-blue">
                     <div class="card-body">
                       <p class="mb-4">Tổng số đơn theo ngày</p>
-                      <p class="fs-30 mb-3">{{ total_orders.0.0 }}</p>
+                      <p class="fs-30 mb-3">{{ total_orders_day.0.0 }}</p>
                     </div>
                   </div>
                 </div>
@@ -104,7 +94,7 @@
                   <div class="card card-light-danger">
                     <div class="card-body">
                       <p class="mb-4">Tổng số đơn theo tháng</p>
-                      <p class="fs-30 mb-3">{{ total_orders.0.1 }}</p>
+                      <p class="fs-30 mb-3">{{ total_orders_month.0.0 }}</p>
                     </div>
                   </div>
                 </div>

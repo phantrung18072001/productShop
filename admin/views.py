@@ -81,15 +81,18 @@ def product_Update(request):
     if request.user.is_admin:
         if request.method == 'POST':
                 product = Product.objects.get(id=request.POST.get('id'))
-                inventory = Inventory.objects.get(product_id=product)
+                try:
+                    inventory = Inventory.objects.get(product_id=product)
+                except:
+                    inventory = Inventory(product_id=product)
                 try:
                     image1 = Image.objects.get(product_id=product, main_image=True)
                 except:
-                    image1 = Image(product_id=product)
+                    image1 = Image(product_id=product, main_image=True)
                 try:
                     image2 = Image.objects.get(product_id=product, main_image=False)
                 except:
-                    image2 = Image(product_id=product)
+                    image2 = Image(product_id=product, main_image=False)
 
                     
 
